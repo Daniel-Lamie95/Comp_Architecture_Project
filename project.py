@@ -60,17 +60,22 @@ address = 0
 for line_number, parts in lines:
     first = parts[0].upper()
 
-    if first not in opcodes and first not in directives:  #not a instruction or a directive(hex,dec)  so , it is a lable (ex.X,Y)
-        label = parts[0]
+    # CASE 1: label
+    if first not in opcodes and first not in directives:
+        label = parts[0].upper()
 
         if label in labels:
-            print(f"Error at line {line_number}: Duplicate label '{label}'")  # f(formated string)->let that any thing inside {} will be replaced by its value so ypu can put variables iside string 
+            print(f"Error at line {line_number}: Duplicate label '{label}'")
             exit()
 
         labels[label] = address
 
-    address += 1
+        
+        if len(parts) > 1:
+            address += 1
 
+    else:
+        address += 1
 
 machinecode = []
 for line_number, parts in lines:
@@ -90,7 +95,7 @@ for line_number, parts in lines:
         if len(parts) < 2:
             print(f"Error at line {line_number}: Missing operand for directive '{instruction}'")
             exit()
-        second = parts[operand_index]
+        second = parts[operand_index].upper()
         try:
             if instruction == "DEC":
                 operand = int(second)
@@ -107,7 +112,7 @@ for line_number, parts in lines:
         if len(parts) < 2:
             print(f"Error at line {line_number}: Missing operand for instruction '{instruction}'")
             exit()
-        second = parts[operand_index]
+        second = parts[operand_index].upper()
         if second in labels:
             operand = labels[second]
         else:
@@ -118,9 +123,18 @@ for line_number, parts in lines:
                 exit()
 
         machinecode.append(opcode + f"{operand:03X}")  #f"{operand:03X}" -> means convert operand to hexadecimal and make it 3 digits long (with leading zeros if necessary)
+        
+
     else:
         print(f"Error at line {line_number}: Unknown instruction or directive '{instruction}'")
         exit()  
+        
+
+binarycode = []
+
+for code in machinecode:
+    binary = format(int(code, 16), "016b")
+    binarycode.append(binary)
 
 try:
     with open("output.txt", "w") as file:
@@ -130,10 +144,14 @@ except IOError:
     print("Error: Could not write to output.txt")
     exit()
 
+try:
+    with open("output_binary.txt", "w") as file:
+        for code in binarycode:
+            file.write(code + "\n")
+except IOError:
+    print("Error: Could not write to output_binary.txt")
+    exit()
 
-
-        
-        
 
 
         
