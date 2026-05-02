@@ -1,4 +1,3 @@
-/ Test assembly program
 START, LOAD 5
 ADD 3
 STORE 10
