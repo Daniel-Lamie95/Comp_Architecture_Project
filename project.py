@@ -37,7 +37,12 @@ def clean_line(line):
 
     # Split line into words
     return line.split()
+#the assembler function
+def assemble():
 
+    labels.clear()
+
+    lines.clear()
 
 # Step 1: Read and clean input.asm
 try:
