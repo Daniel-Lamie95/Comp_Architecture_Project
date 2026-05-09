@@ -92,7 +92,7 @@ for line_number, parts in lines:
         instruction = parts[1].upper()
         operand_index = 2
         
-    elif instruction in no_operand:
+    if instruction in no_operand:
         opcode = opcodes[instruction]
         machinecode.append(opcode + "000")
 
